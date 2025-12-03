@@ -1,0 +1,3 @@
+/home/vinz/XSV/cpp_rs/CMakeFiles/Test.dir
+/home/vinz/XSV/cpp_rs/CMakeFiles/edit_cache.dir
+/home/vinz/XSV/cpp_rs/CMakeFiles/rebuild_cache.dir

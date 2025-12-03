@@ -1,0 +1,1 @@
+/usr/bin/c++ -Wl,--dependency-file=CMakeFiles/Test.dir/link.d CMakeFiles/Test.dir/main.cpp.o -o Test  -lcurl -lraylib
