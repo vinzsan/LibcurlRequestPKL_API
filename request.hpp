@@ -2,11 +2,14 @@
 #include <cstring>
 #include <iostream>
 #include <sched.h>
+#include <stdexcept>
 #include <sys/types.h>
 #include <unistd.h>
 #include <curl/curl.h>
 #include <sys/signal.h>
 #include <mutex>
+#include <unordered_map>
+#include <fstream>
 
 
 #define panic(args) (({std::cout << "panic : signal abort thread 'main' PID(" << getpid() << ") restorer" << std::endl;\
@@ -42,6 +45,31 @@ public:
         if(curl){
             curl_easy_setopt(curl,CURLOPT_URL,this->url_buf.c_str());
         }
+    }
+
+    static std::unordered_map<std::string, std::string> collect_env(const std::string &path){
+        std::unordered_map<std::string, std::string> env;
+        std::ifstream file(path);
+        
+        if(!file.is_open()){
+            std::cerr << "ERROR : failed to load env" << std::endl;
+            throw std::runtime_error("ERROR : failed to load env");
+        }
+        std::string line;
+        while(std::getline(file,line)){
+            if(line.empty() || line[0] == '#'){
+                continue;
+            }
+            auto position = line.find('=');
+            if(position == std::string::npos) continue;
+
+            std::string key = line.substr(0,position);
+            std::string value = line.substr(position + 1);
+
+            env[key] = value;
+        }
+        
+        return env;
     }
 
     std::string& operator*(){

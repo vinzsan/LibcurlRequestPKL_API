@@ -4,7 +4,8 @@
 #include <nlohmann/json.hpp>
 
 int main(){
-    auto r = Request("https://apidev-pkl.hummatech.com/api/login")
+    auto load_env = Request::collect_env(".env");
+    auto r = Request(load_env["BASE_API_URL"] + "/api/login")
             .post_request(
                 "{\"email\":\"pesertademo@gmail.com\",\"password\":\"12345678\"}"
             ).get_result();
@@ -15,17 +16,17 @@ int main(){
 
     std::cout << "vinzsan token : " << token << std::endl;
     
-    auto assign_peserta = Request("https://apidev-pkl.hummatech.com/api/assign/peserta")
+    auto assign_peserta = Request(load_env["BASE_API_URL"] + "/api/assign/peserta")
             .post_request(std::format(R"({{"id_user":"{}"}})", id))
             .get_result();
             
     std::cout << assign_peserta << std::endl;
 
-    auto s = Request("https://apidev-pkl.hummatech.com/api/peserta/detail")
+    auto s = Request(load_env["BASE_API_URL"] + "/api/peserta/detail/")
             .get_token(token)
             .get_request()
             .get_result();
-
+    
     std::cout << s << std::endl;
     
     return 0;
